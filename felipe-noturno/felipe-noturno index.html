@@ -1,0 +1,183 @@
+<!DOCTYPE html> <!-- declara o tipo do documento-->
+<html lang="pt-BR"> <!-- envolve todo conteúdo html e define a linguagem usada -->
+<head> <!-- abertura geral do documento--> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Avaliação Final</title> <!--título que aparece na aba do navegador -->
+</head>
+
+<style> /* css interno */
+
+    body { /* estilização do corpo do site */
+    font-family: 'Arial', sans-serif; /* define a fonte que será usada no site */
+    background: linear-gradient(to bottom, #333, #111); /* cor de fundo em degradê */
+    color: #fff; /* cor da fonte */
+    margin: 0; /* espaçamento externo */
+    padding: 0; /* espaçamento interno */
+    display: flex; /* define o layout da página deixando responsivo*/
+    justify-content: center; /* alinhamento horizontal */
+    align-items: center; /* alinhamento vertical */
+    height: 100vh; /* altura */
+    flex-direction: column; /* define a direção do conteúdo do corpo */
+}
+h1 { /* estilização do titulo */
+    background-color: #222; /* cor de fundo  */
+    border-radius: 10px; /* arrendodamneto da borda */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /*  */
+    padding: 20px; /* espaçamento interno */
+    color: #4CAF50; /* cor da fonte */
+    text-align: center; /* alinhamento do texto */
+    font-size: 2.5rem; /* tamanho da fonte */
+    border: 2px solid #4CAF50; /* largura, estilo e cor da fonte */
+}
+
+button { /* estilização do botão */
+    background-color: #4CAF50;
+    color: white; /* cor da fonte */
+    padding: 10px 20px; /* espaçamento interno */
+    border: none; /* sem borda */
+    border-radius: 5px; 
+    cursor: pointer; /* estilização do ponteiro do mouse ao passar em cima do botão */
+    transition: background 0.3s ease; /* efeito de cor da transição do butão */
+}
+
+button:hover { /* estilização do botão à passar o mouse em cima */
+    background-color: #45a049;
+}
+
+input[type="text"] { /* estilização interno da caixa de pergunta */
+    padding: 10px; /* espaçamento interno */
+    border-radius: 5px;
+    border: 1px solid #4CAF50;
+    outline: none; 
+    width: 100%; /* largura */
+    box-sizing: border-box; 
+}
+
+input[type="text"]:focus { /* estilização externa da caixa de pergunta */
+    border-color: #45a049; /* cor da borda */
+    box-shadow: 0 0 5px #00ff2a; 
+}
+
+table { /* tabela */
+    margin-top: 20px; /* margem acima */
+    border-collapse: collapse; 
+    width: 100%; 
+}
+
+th, td { /* cor das linhas da tabela */
+    border: 1px solid #ffffff;
+    padding: 10px; /* espaçamento interno */
+    text-align: center;
+}
+
+th { /* estilo do cabeçalho da lista */
+    background-color: #4CAF50;
+    color: white; /* cor da fonte */
+}
+
+#drag-container { /* estilização dos botões das tarefas */
+    display: flex;
+    margin-top: 20px; /* margem acima*/
+}
+
+.task { /* estilização do botão de ação das tarefas  */
+    padding: 10px; /* espaçamento interno */
+    background-color: #4CAF50;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: grab; /* efeito do ponteiro do mouse */
+    color: white; /* cor da fonte */
+    text-align: center; /* alinhamento do texto*/
+    transition: transform 0.3s ease; /* transição da caixa das tarefas */
+}
+
+.task:hover { /* efeito de movimento ao passar o mouse em cima das tarefas */
+    transform: scale(1.1); /*  */
+}
+
+#drop-area { /* estilização da caixa "arraste aqui" */
+    width: 200px;
+    height: 150px; /* altura */
+    border: 2px dashed #4CAF50;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4CAF50; /* cor da fonte */
+}
+
+#drop-area.drag-over { /* cor de fundo da caixa "arraste aqui" */
+    background-color: rgba(76, 175, 80, 0.1); 
+}
+</style>
+
+<body> <!--conteúdo do site --> 
+
+    <h1>Avaliação Final</h1> <!-- titulo --> 
+
+    <input type="text" id="userInput"   placeholder="Digite algo..."> <!-- caixa de pergunta  --> 
+    <button onclick="showAlert()">Enviar</button> <!-- butão da caixa --> 
+
+    <table id="itemTable" style="display:none;"> <!-- tabela --> 
+        <thead>
+            <tr> <!-- define uma linha de tabela usada dentro de table --> 
+                <th>Item</th> <!-- cabeçalho usado dentro do tr--> 
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody> <!-- conteúdo da tabela --> 
+    </table>
+
+    <button onclick="showItems()">Mostrar Itens</button> <!--botão para mostrar itens da caixa--> 
+
+    <div id="drag-container"> <!-- div = para separar os conteúdos --> 
+        <div id="task1" class="task" draggable="true" ondragstart="dragStart(event)">Tarefa 1</div> <!--id = identifica o elemento da página --> 
+        <div id="task2" class="task" draggable="true" ondragstart="dragStart(event)">Tarefa 2</div>
+        <div id="task3" class="task" draggable="true" ondragstart="dragStart(event)">Tarefa 3</div>
+    </div>
+    <div id="drop-area" ondragover="allowDrop(event)" ondrop="dropTask(event)">Arraste aqui</div>
+
+   
+<script> // tag para o JavaScript interno
+     function showAlert() { // função para mensagem do alerta
+        const userInput = document.getElementById('userInput').value; //  seleciona o elemento HTML pelo Id
+        if (userInput) { // faz a validação se o valor for valido
+            alert('Você digitou: ' + userInput); // mensagem que aparece após digitar algo
+        } else { // faz com que apareça o aviso se você não digitar nada
+            alert('Por favor, digite algo.'); // mensagem de aviso caso você não digite nada
+        }
+    }
+    const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4']; // const sendo usada para definir os itens da tabela
+    function showItems() { // função para os itens da tabela
+        const table = document.getElementById('itemTable'); // document puxando o Id "itemTable" 
+        const tableBody = document.getElementById('tableBody'); 
+        tableBody.innerHTML = ''; // inner está alterando o conteudo do html na tabela
+        items.forEach(item => { // permite adicoanr os itens na tabela do arraste aqui
+            const row = document.createElement('tr'); 
+            const cell = document.createElement('td');
+            cell.textContent = item;
+            row.appendChild(cell);
+            tableBody.appendChild(row);
+        });
+        table.style.display = 'table';
+    }
+    
+    function allowDrop(event) { //  função para receber os itens arrastados para a tabela
+        event.preventDefault();
+        const dropArea = document.getElementById('drop-area');
+        dropArea.classList.add('drag-over');
+    }
+    function dragStart(event) { // função para arrastar as tarefas
+        event.dataTransfer.setData('text', event.target.id);
+    }
+    function dropTask(event) { // função para fechar o evento da movimentação
+        event.preventDefault();
+        const taskId = event.dataTransfer.getData('text'); 
+        const task = document.getElementById(taskId);
+        const dropArea = document.getElementById('drop-area');
+        dropArea.appendChild(task);
+        dropArea.classList.remove('drag-over'); 
+    }
+</script> 
+</body>
+</html>
